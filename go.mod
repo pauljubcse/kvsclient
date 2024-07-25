@@ -1,4 +1,4 @@
-module kvsclient
+module github.com/pauljubcse/kvsclient
 
 go 1.22.5
 
