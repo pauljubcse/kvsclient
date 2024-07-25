@@ -1,6 +1,8 @@
 package kvsclient
 
 import (
+	"fmt"
+	"log"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -183,4 +185,75 @@ func TestWebSocketStore(t *testing.T) {
 	conn.ReadJSON(&searchSkipListResponse5)
 	assert.Equal(t, "success", searchSkipListResponse5.Status)
 	assert.Equal(t, "value3", searchSkipListResponse5.Value)
+}
+
+
+//Require server to be running else where
+func TestIncrementDecrement(t *testing.T) {
+	server, err := kvs.StartServer("ws://localhost:9000/ws")
+	if err != nil {
+		log.Fatalf("Failed to start server: %v", err)
+	}
+	fmt.Println("Started server...")
+
+	
+	client, err := NewClient("ws://localhost:9000/ws")
+	if err != nil {
+		t.Fatalf("Error connecting to server: %v", err)
+	}
+	defer client.Close()
+
+	// Create a domain
+	domain := "test_domain"
+	err = client.CreateDomain(domain)
+	if err != nil {
+		t.Fatalf("Error creating domain: %v", err)
+	}
+
+	// Set a key with initial value
+	key := "counter"
+	initialValue := "0"
+	err = client.SetString(domain, key, initialValue)
+	if err != nil {
+		t.Fatalf("Error setting string: %v", err)
+	}
+
+	// Increment the key
+	err = client.Increment(domain, key)
+	if err != nil {
+		t.Fatalf("Error incrementing counter: %v", err)
+	}
+
+	// Check the incremented value
+	value, err := client.GetString(domain, key)
+	if err != nil {
+		t.Fatalf("Error getting string: %v", err)
+	}
+	expectedValue := "1"
+	if value != expectedValue {
+		t.Fatalf("Expected value after increment is %s, but got %s", expectedValue, value)
+	}
+
+	// Decrement the key
+	err = client.Decrement(domain, key)
+	if err != nil {
+		t.Fatalf("Error decrementing counter: %v", err)
+	}
+
+	// Check the decremented value
+	value, err = client.GetString(domain, key)
+	if err != nil {
+		t.Fatalf("Error getting string: %v", err)
+	}
+	expectedValue = "0"
+	if value != expectedValue {
+		t.Fatalf("Expected value after decrement is %s, but got %s", expectedValue, value)
+	}
+	
+	fmt.Println("Shutting down server...")
+	if err := server.CloseServer(); err != nil {
+		log.Fatalf("Server Shutdown Failed:%+v", err)
+	}
+	fmt.Println("Server gracefully stopped")
+
 }

@@ -137,3 +137,27 @@ func (c *Client) SearchInSkipList(domain, slkey, key string) (string, error) {
 	}
 	return resp.Value, nil
 }
+
+func (c *Client) Increment(domain, key string) error {
+	req := Request{Action: "increment", Domain: domain, Key: key}
+	resp, err := c.sendRequest(req)
+	if (err != nil) {
+		return err
+	}
+	if (resp.Status != "success") {
+		return fmt.Errorf("failed to increment: %s", resp.Message)
+	}
+	return nil
+}
+
+func (c *Client) Decrement(domain, key string) error {
+	req := Request{Action: "decrement", Domain: domain, Key: key}
+	resp, err := c.sendRequest(req)
+	if (err != nil) {
+		return err
+	}
+	if (resp.Status != "success") {
+		return fmt.Errorf("failed to decrement: %s", resp.Message)
+	}
+	return nil
+}
