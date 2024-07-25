@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+	"time"
 
 	"github.com/gorilla/websocket"
 	"github.com/pauljubcse/kvs"
@@ -185,19 +186,20 @@ func TestWebSocketStore(t *testing.T) {
 	conn.ReadJSON(&searchSkipListResponse5)
 	assert.Equal(t, "success", searchSkipListResponse5.Status)
 	assert.Equal(t, "value3", searchSkipListResponse5.Value)
+	fmt.Println("Test Web Socket Done")
 }
 
 
 //Require server to be running else where
 func TestIncrementDecrement(t *testing.T) {
-	server, err := kvs.StartServer("ws://localhost:9000/ws")
+	server, err := kvs.StartServer("ws://localhost:9080/ws")
 	if err != nil {
 		log.Fatalf("Failed to start server: %v", err)
 	}
 	fmt.Println("Started server...")
 
 	
-	client, err := NewClient("ws://localhost:9000/ws")
+	client, err := NewClient("ws://localhost:9080/ws")
 	if err != nil {
 		t.Fatalf("Error connecting to server: %v", err)
 	}
@@ -255,5 +257,82 @@ func TestIncrementDecrement(t *testing.T) {
 		log.Fatalf("Server Shutdown Failed:%+v", err)
 	}
 	fmt.Println("Server gracefully stopped")
+	//server.CloseServer()
+	fmt.Println("Test Inc/Dec Done")
+}
 
+func TestRankInSkipList(t *testing.T) {
+	server, err := kvs.StartServer("ws://localhost:9190/ws")
+	if err != nil {
+		log.Fatalf("Failed to start server: %v", err)
+	}
+	fmt.Println("Started server...")
+	
+	client, err := NewClient("ws://localhost:9190/ws")
+	if err != nil {
+		t.Fatalf("Failed to connect to server: %v", err)
+	}
+	defer client.Close()
+
+	// Create a domain
+	domain := "test_domain"
+	err = client.CreateDomain(domain)
+	if err != nil {
+		t.Fatalf("Failed to create domain: %v", err)
+	}
+
+	// Insert elements into the skip list
+	slKey := "test_skiplist"
+	elements := []struct {
+		key   string
+		value string
+	}{
+		{"1", "one"},
+		{"2", "two"},
+		{"3", "three"},
+		{"5", "five"},
+		{"7", "seven"},
+	}
+	for _, elem := range elements {
+		err := client.InsertToSkipList(domain, slKey, elem.key, elem.value)
+		if err != nil {
+			t.Fatalf("Failed to insert %s: %v", elem.key, err)
+		}
+	}
+
+	// Allow some time for the server to process the requests
+	time.Sleep(2 * time.Second)
+
+	// Define test cases for rank
+	tests := []struct {
+		key          string
+		expectedRank string
+	}{
+		{"1", "0"},
+		{"2", "1"},
+		{"3", "2"},
+		{"4", "3"},  // Non-existent element, should return rank as if it was present
+		{"5", "3"},
+		{"6", "4"},  // Non-existent element, should return rank as if it was present
+		{"7", "4"},
+		{"8", "5"},  // Non-existent element, should return rank as if it was present
+	}
+
+	for _, tt := range tests {
+		t.Run("rank_of_"+tt.key, func(t *testing.T) {
+			rank, err := client.RankInSkipList(domain, slKey, tt.key)
+			if err != nil {
+				t.Fatalf("Failed to get rank for %s: %v", tt.key, err)
+			}
+			if rank != tt.expectedRank {
+				t.Errorf("Rank of %s = %s; want %s", tt.key, rank, tt.expectedRank)
+			}
+		})
+	}
+	fmt.Println("Shutting down server...")
+	if err := server.CloseServer(); err != nil {
+		log.Fatalf("Server Shutdown Failed:%+v", err)
+	}
+	fmt.Println("Server gracefully stopped")
+	fmt.Println("Test Rank Done")
 }

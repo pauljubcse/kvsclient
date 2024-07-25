@@ -138,6 +138,18 @@ func (c *Client) SearchInSkipList(domain, slkey, key string) (string, error) {
 	return resp.Value, nil
 }
 
+func (c *Client) RankInSkipList(domain, slkey, key string) (string, error) {
+	req := Request{Action: "rank_skiplist", Domain: domain, SLKey: slkey, Key: key}
+	resp, err := c.sendRequest(req)
+	if err != nil {
+		return "", err
+	}
+	if resp.Status != "success" {
+		return "", fmt.Errorf("failed to get rank: %s", resp.Message)
+	}
+	return resp.Value, nil
+}
+
 func (c *Client) Increment(domain, key string) error {
 	req := Request{Action: "increment", Domain: domain, Key: key}
 	resp, err := c.sendRequest(req)

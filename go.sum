@@ -2,12 +2,10 @@ github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/gorilla/websocket v1.5.3 h1:saDtZ6Pbx/0u+bgYQ3q96pZgCzfhKXGPqt7kZ72aNNg=
 github.com/gorilla/websocket v1.5.3/go.mod h1:YR8l580nyteQvAITg2hZ9XVh4b55+EU/adAjf1fMHhE=
-github.com/pauljubcse/kvs v0.0.0-20240725123153-21263e4ba334 h1:0+3TOy5F2YdFw+MATARsbYqgK5nxeNXMM25fWCWOmrA=
-github.com/pauljubcse/kvs v0.0.0-20240725123153-21263e4ba334/go.mod h1:CNgpJGw3Ppfo3QMgQak8truRF05ZgNgzO4tJ4eeVjrE=
-github.com/pauljubcse/kvs v0.0.0-20240725132646-631ff80f3bf2 h1:IuaUwtiC6ifpmOJP8mMhXLdWglQYrHvDCIQB7mMWXNk=
-github.com/pauljubcse/kvs v0.0.0-20240725132646-631ff80f3bf2/go.mod h1:CNgpJGw3Ppfo3QMgQak8truRF05ZgNgzO4tJ4eeVjrE=
-github.com/pauljubcse/kvs v0.0.0-20240725135423-2fd955f8ebbb h1:P9bZvXnNJvf4CEYEogxdkKjrxDQoAOEo+xoGZ8Cvvlg=
-github.com/pauljubcse/kvs v0.0.0-20240725135423-2fd955f8ebbb/go.mod h1:CNgpJGw3Ppfo3QMgQak8truRF05ZgNgzO4tJ4eeVjrE=
+github.com/pauljubcse/kvs v0.0.0-20240725192702-8bcd66b2cb70 h1:yj/jHVMgyaBKoc8DJfVu65FMm07FhTfI+gOQUhRjDk8=
+github.com/pauljubcse/kvs v0.0.0-20240725192702-8bcd66b2cb70/go.mod h1:CNgpJGw3Ppfo3QMgQak8truRF05ZgNgzO4tJ4eeVjrE=
+github.com/pauljubcse/kvs v0.0.0-20240725204428-0d6ef3d8ffea h1:itjA6nU5JTvCQniKgH+IOr3fnEyiiEkHl45lEJ0h6mE=
+github.com/pauljubcse/kvs v0.0.0-20240725204428-0d6ef3d8ffea/go.mod h1:CNgpJGw3Ppfo3QMgQak8truRF05ZgNgzO4tJ4eeVjrE=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/stretchr/testify v1.9.0 h1:HtqpIVDClZ4nwg75+f6Lvsy/wHu+3BoSGCbBAcpTsTg=

@@ -4,7 +4,7 @@ go 1.22.5
 
 require (
 	github.com/gorilla/websocket v1.5.3
-	github.com/pauljubcse/kvs v0.0.0-20240725135423-2fd955f8ebbb
+	github.com/pauljubcse/kvs v0.0.0-20240725204428-0d6ef3d8ffea
 	github.com/stretchr/testify v1.9.0
 )
 
